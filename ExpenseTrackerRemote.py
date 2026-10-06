@@ -1,10 +1,10 @@
 from fastmcp import FastMCP
+from contextlib import asynccontextmanager
 from typing import Optional
 import aiosqlite
 import os
 import tempfile
 
-mcp = FastMCP("Expense Tracker")
 
 PATH = os.path.join(tempfile.gettempdir(), "Expenses.db")
 
@@ -23,6 +23,18 @@ async def init_db() -> None:
             )
         """)
         await c.commit()
+
+
+@asynccontextmanager
+async def lifespan(server):
+    await init_db()
+    yield
+
+
+mcp = FastMCP(
+    "Expense Tracker",
+    lifespan=lifespan
+)
 
 
 @mcp.tool
