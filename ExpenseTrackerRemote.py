@@ -1,10 +1,13 @@
 from fastmcp import FastMCP
 from typing import Optional
-import sqlite3  
+import sqlite3
 import os
+import tempfile
 
 mcp = FastMCP("Expense Tracker")
-PATH = os.path.join(os.path.dirname(__file__),"Expenses.db")
+
+PATH = os.path.join(tempfile.gettempdir(), "Expenses.db")
+
 ALLOWED_COLUMNS = {"date", "amount", "category", "subcategory", "note"}
 
 def init_db() -> None:
